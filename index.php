@@ -3,6 +3,7 @@ $errorMessages = [
     1 => "Username and password are required.",
     2 => "User not found.",
     3 => "Invalid credentials.",
+    4 => "status code 200 problem.",
     500 => "Something went wrong. Please try again later."
 ];
 
