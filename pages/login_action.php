@@ -30,12 +30,30 @@ try {
     exit();
 }
 
+$client = new \GuzzleHttp\Client();
+
+
 if (count($user) > 0) {
     $db_password = $user[0]['password'];
 
     if (password_verify($password, $db_password)) {
-        $_SESSION['user_id'] = $user[0]['id'];
-        header("Location: control_panel.php");
+        try {
+            $response = $client->request('POST', 'http://localhost/postman_practice/pages/login_action.php', [
+                'form_params' => [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            ]);
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+            echo $e->getMessage();
+        }
+
+        if ($response->getStatusCode() == 200) {
+            $_SESSION['user_id'] = $user[0]['id'];
+            header("Location: control_panel.php");
+        } else {
+            header("Location: ../index.php?error=4"); // error 200
+        }
     } else {
         header("Location: ../index.php?error=3");// 3 invalid credentials
     }
